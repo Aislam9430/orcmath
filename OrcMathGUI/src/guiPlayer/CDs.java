@@ -25,6 +25,7 @@ public class CDs extends AnimatedComponent
 		this.releaseDate = releaseDate;
 	}
 
+	
 	public String toString()
 	{
 		return name + "," + artist + "," + price + "," + isbn + "," + releaseDate;
