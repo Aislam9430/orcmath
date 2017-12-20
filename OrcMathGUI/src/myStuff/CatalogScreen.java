@@ -1,5 +1,8 @@
 package myStuff;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -31,12 +34,12 @@ public class CatalogScreen extends FullFunctionScreen
 		catalog = new CatalogMaker();
 		titleField = new TextField(40,40,200,30,"Text Goes Here","Title");
 		artistField = new TextField(140,40,200,30,"Text Goes Here","Artist");
-		priceField = new TextField(240,40,200,30,"Text Goes Here","Price");
+		priceField = new TextField(240,40,200,30,"11","Price");
 		priceField.setInputType(TextField.INPUT_TYPE_NUMERIC);
-		isbnField = new TextField(340,40,200,30,"Text Goes Here","Isbn");
+		isbnField = new TextField(340,40,200,30,"123","Isbn");
 		isbnField.setInputType(TextField.INPUT_TYPE_NUMERIC);
-		releaseDateField = new TextField(440,40,200,30,"Text Goes Here","Date");
-		textarea = new TextArea(400, 300, 200, 40, "cd list");
+		releaseDateField = new TextField(440,40,200,30,"11/23/2017","Date");
+		textarea = new TextArea(400, 300, 200, 200, "cd list");
 		add = new Button(40,70,100,40,"Text Add", new Action() 
 		{
 			
@@ -58,13 +61,25 @@ public class CatalogScreen extends FullFunctionScreen
 
 	protected void addButtonClicked() 
 	{
-		CDs album = new CDs(titleField.getText(),artistField.getText(),Integer.parseInt(priceField.getText()), Integer.parseInt(isbnField.getText()),new Date());
+		try {
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		Date d = df.parse(releaseDateField.getText());
+		CDs album = new CDs(titleField.getText(),artistField.getText(),Integer.parseInt(priceField.getText()), Integer.parseInt(isbnField.getText()),d);
 		String s = textarea.getText() + album + "\n";
-		catalog.addCDs(new CDs(titleField.getText(),artistField.getText(),Integer.parseInt(priceField.getText()), Integer.parseInt(isbnField.getText()),new Date()));
-		titleField.setText(" ");
-		artistField.setText(" ");
-		priceField.setText(" ");		
-		isbnField.setText(" ");
+		textarea.setText(s);
+		catalog.addCDs(new CDs(titleField.getText(),artistField.getText(),Integer.parseInt(priceField.getText()), Integer.parseInt(isbnField.getText()),d));
+		titleField.setText("");
+		artistField.setText("");
+		priceField.setText("");		
+		isbnField.setText("");
+		titleField.update();
+		
+		}catch(NumberFormatException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 

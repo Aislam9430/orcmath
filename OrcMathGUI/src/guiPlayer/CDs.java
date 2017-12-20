@@ -2,6 +2,8 @@ package guiPlayer;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import guiTeacher.components.AnimatedComponent;
@@ -28,7 +30,8 @@ public class CDs extends AnimatedComponent
 	
 	public String toString()
 	{
-		return name + "," + artist + "," + price + "," + isbn + "," + releaseDate;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		return name + "," + artist + "," + price + "," + isbn + "," + df.format(releaseDate);
 	}
 	
 	
