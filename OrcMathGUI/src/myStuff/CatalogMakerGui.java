@@ -1,7 +1,7 @@
 package myStuff;
 
-import guiPlayer.Sampler;
-import guiTeacher.GUIApplication;
+
+import guiTeacher.*;
 
 public class CatalogMakerGui extends GUIApplication 
 {
@@ -15,7 +15,7 @@ public class CatalogMakerGui extends GUIApplication
 	
 	public void initScreen()
 	{
-		CatalogScreen s = new CatalogScreen(getWidth(), getHeight());
+		
 		setScreen(s);
 	}
 
@@ -24,7 +24,6 @@ public class CatalogMakerGui extends GUIApplication
 		CatalogMakerGui sample = new CatalogMakerGui(800, 550);
 		Thread go = new Thread(sample);
 		go.start();
-
 	}
 
 }
