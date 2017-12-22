@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.List;
 
 import guiTeacher.components.Action;
+import guiTeacher.components.AnimatedComponent;
 import guiTeacher.components.Button;
 import guiTeacher.components.TextArea;
 import guiTeacher.components.TextField;
@@ -14,7 +15,7 @@ import guiTeacher.userInterfaces.FullFunctionScreen;
 public class IntroScreen extends FullFunctionScreen 
 {
 	private Button open;
-	private SnowFlake snow;
+	private AnimatedComponent snow;
 	private TextArea greet;
 
 	public IntroScreen(int width, int height)
@@ -25,8 +26,8 @@ public class IntroScreen extends FullFunctionScreen
 	@Override
 	public void initAllObjects(List<Visible> viewObjects)
 	{
-		createFont();
-		greet = new TextArea(75,75,75,75,"8008135");
+		///createFont();
+		greet = new TextArea(75,75,75,75,"");
 		open = new Button((getWidth()-100)/2,getHeight()-40,100,30,"Switch",new Action() 
 		{
 			public void act() 
@@ -34,11 +35,18 @@ public class IntroScreen extends FullFunctionScreen
 				HolidayCardGUI.sample.setScreen(HolidayCardGUI.in);
 			}
 		});
-		snow = new SnowFlake(0,0,getWidth(),getHeight());
+		snow = new AnimatedComponent(0, 0, 65, 56);
+		snow.addSequence("resources/s.png", 40, 0, 0, 20, 100, 2);
+		Thread run = new Thread(snow);
+		run.start();
+		
+		viewObjects.add(snow);
 		viewObjects.add(greet);
 		viewObjects.add(open);
 		
 	}
+	
+
 	public void createFont()
 	{
 		try
