@@ -18,6 +18,7 @@
  *******************************************************************************/
 package guiTeacher.components;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.FontMetrics;
@@ -44,6 +45,7 @@ public class Button extends TextLabel implements Clickable{
 		enabled = true;
 		this.action = action;
 		setCurve(35,25);
+		setActiveBorderColor(Color.BLACK);
 		update();
 		
 	}
@@ -53,6 +55,7 @@ public class Button extends TextLabel implements Clickable{
 		this.action = action;
 		enabled = true;
 		setCurve(35,25);
+		setActiveBorderColor(Color.BLACK);
 		update();
 
 	}
@@ -79,7 +82,7 @@ public class Button extends TextLabel implements Clickable{
 	}
 
 	public BufferedImage getImage(){
-		if(hovered)return hoverImage;
+		if(hovered || !enabled)return hoverImage;
 		else return super.getImage();
 	}
 	
@@ -97,7 +100,9 @@ public class Button extends TextLabel implements Clickable{
 	
 	public void update(){
 		hoverImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
-		drawButton(hoverImage.createGraphics(), true);
+		Graphics2D hoverG = hoverImage.createGraphics();
+		applyStyles(hoverG);
+		drawButton(hoverG, true);
 		super.update();
 	}
 	
@@ -113,9 +118,13 @@ public class Button extends TextLabel implements Clickable{
 		}else{
 			clear();
 		}
-		g.setColor(Color.BLACK);
-		g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, curveX, curveY);
+		if (isButtonOutline()){
+			g.setColor(getActiveBorderColor());
+			g.setStroke(new BasicStroke(getButtonOutlineSize()));
+			g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, curveX, curveY);
+		}
 	}
+	
 	
 	public void drawButton(Graphics2D g, boolean hover){
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -126,7 +135,7 @@ public class Button extends TextLabel implements Clickable{
 		FontMetrics fm = g.getFontMetrics();
 		
 		if(getText()!= null){
-			g.setColor(Color.white);
+			g.setColor(getForeground());
 			String t = getText();
 			//just in case text is too wide, cut off
 			int cutoff = t.length();
@@ -139,6 +148,15 @@ public class Button extends TextLabel implements Clickable{
 		}
 	}
 
+	public void hoverAction(){
+		GUIApplication.mainFrame.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		setLeft(false);
+	}
+	
+	public void unhoverAction(){
+		setLeft(true);
+		GUIApplication.mainFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	}
 
 	public boolean isHovered(int x, int y) {
 		boolean b = x>getX() && x<getX()+getWidth() 
@@ -148,11 +166,9 @@ public class Button extends TextLabel implements Clickable{
 //		}
 		hovered = b && enabled;
 		if(hovered){
-			GUIApplication.mainFrame.setCursor(new Cursor(Cursor.HAND_CURSOR));
-			setLeft(false);
+			hoverAction();
 		}else if (!hasLeft()){
-			setLeft(true);
-			GUIApplication.mainFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			unhoverAction();
 		}
 		return hovered;
 	}

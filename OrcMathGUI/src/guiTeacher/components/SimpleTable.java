@@ -40,22 +40,24 @@ public class SimpleTable extends StyledComponent implements Clickable, Dragable{
 	//Since clicking on a table moves focus, the table must have access to the direction of focus
 	private FocusController parentScreen;
 
-	private TableHeader columns;
-	private ArrayList<SimpleTableRow> rows;
+	protected TableHeader columns;
+	protected ArrayList<SimpleTableRow> rows;
 	private SimpleTableRow hoveredRow;
 	
 	
-	private BufferedImage trashClosed;
-	private BufferedImage trashOpen;
+	protected BufferedImage trashClosed;
+	protected BufferedImage trashOpen;
+	private boolean trashClickedOnce;//helps for identifying double-click on trash
 	private SimpleTableRow movingRow;
 	private Component movementGhost;
 	private int hoverStartY;
 	private int origIndex;
 	private int moveToIndex;
 	private boolean trashHovered; 
+	private boolean multilineRows;
 	
-	private int xRelative;
-	private int yRelative;
+	protected int xRelative;
+	protected int yRelative;
 	private Color highlight;
 	private int lastHeight;//a variable that clears the table when its size is reduced (so old rows get deleted)
 
@@ -66,7 +68,17 @@ public class SimpleTable extends StyledComponent implements Clickable, Dragable{
 
 	public SimpleTable(FocusController fc, int x, int y, int w, int h, TableHeader columns) {
 		super(x, y, w, h);
-		highlight = getAccentColor();
+		setUp(fc, w, columns, false);
+	}
+	
+	public SimpleTable(FocusController fc, int x, int y, int w, int h, TableHeader columns, boolean multiline) {
+		super(x, y, w, h);
+		setUp(fc, w, columns, multiline);
+	}
+	
+	private void setUp(FocusController fc,int w,TableHeader columns, boolean multiline){
+		highlight = getHighlightColor();
+		multilineRows = multiline;
 		hoveredRow = null;
 		parentScreen =fc;
 		trashHovered = false;
@@ -85,19 +97,28 @@ public class SimpleTable extends StyledComponent implements Clickable, Dragable{
 		update();
 	}
 
-	private void initTrashIcons(){
+	protected void initTrashIcons(){
+		trashClickedOnce = false;
 		trashClosed = new BufferedImage(EDIT_COLUMN,columns.getRowHeight(),BufferedImage.TYPE_INT_ARGB);
 		trashOpen = new BufferedImage(EDIT_COLUMN,columns.getRowHeight(),BufferedImage.TYPE_INT_ARGB);
 		drawTrash(trashClosed.createGraphics(), false);
 		drawTrash(trashOpen.createGraphics(), true);
 	}
 	
+	public void clearRows(){
+		rows.removeAll(rows);
+		clear();
+	}
+	
 	public void addRow(String[] values) {
 		if(values.length == columns.getColumnDescriptions().length){	
-			rows.add(new SimpleTableRow(this, values, columns.getColumnEditable(), columns.getColumnWidths(), columns.getRowHeight()));
+			rows.add(new SimpleTableRow(this, values, columns.getColumnEditable(), columns.getColumnWidths(), columns.getRowHeight(), multilineRows));
 			clear();//updates height
-			update();
 		}
+	}
+	
+	public ArrayList<SimpleTableRow> getRows(){
+		return rows;
 	}
 	
 	/**
@@ -121,13 +142,14 @@ public class SimpleTable extends StyledComponent implements Clickable, Dragable{
 		if(edit.length == columns.getColumnEditable().length){
 			SimpleTableRow row = rows.get(rows.size()-1);
 			for(int i = 0; i< edit.length; i++){
-				row.resetEdit(i, edit[i]);
+				row.resetEdit(i, edit[i], multilineRows);
 			}
 		}else{
 			throw new MatchingLengthException("You cannot change the mutability of a row using a boolean array of length "+edit.length+" because there are "+columns.getColumnEditable().length+" columns. ");
 		}
 	}
 
+	
 	public class MatchingLengthException extends Exception{
 
 		public MatchingLengthException(String string) {
@@ -393,13 +415,79 @@ public class SimpleTable extends StyledComponent implements Clickable, Dragable{
 				hoveredRow = null;
 			}
 			update();
+		}else if(xRelative > EDIT_COLUMN){
+			unHover();
+			changeMouse();
+		}else {
+			unHover();
 		}
 
 	}
+	
+	/**
+	 * changes mouse cursor depending on what is being hovered
+	 */
+	private void changeMouse(){
+			int hoveredRow = yRelative/columns.getRowHeight();
+			int hoveredColumn = 0;
+			int widthToClick = 0;
+			int[] widths = columns.getColumnWidths();
+			while(hoveredColumn<widths.length && widthToClick+widths[hoveredColumn]<xRelative){
+				widthToClick+=columns.getColumnWidths()[hoveredColumn];
+				hoveredColumn++;
+			}
+			//		System.out.println("xRelative = "+xRelative+", yRelative = "+yRelative+", SimpleTable.java clickedRow = "+clickedRow+", clickedColumn = "+clickedColumn);
+			if(hoveredColumn >= widths.length){
+				hoveredColumn = widths.length-1;
+			}
+			if(hoveredRow !=0 && hoveredRow-1 < rows.size()){
+				//NOTE: The following method call only set the pointer. Other hovering actions (i.e. hover text) are ignored
+				rows.get(hoveredRow-1).columnHovered(hoveredColumn, xRelative-(hoveredRow+1)*columns.getRowHeight(),yRelative-widthToClick);
+				update();
+			}
+		
+	}
 
+	private void unHover(){
+		if(hoveredRow != null){
+			hoveredRow.setHover(false);
+		hoveredRow = null;
+		update();
+		}
+	}
+	
+	
 	@Override
 	public void act() {
 		int clickedRow = yRelative/columns.getRowHeight();
+		if(yRelative < columns.getRowHeight() && xRelative < EDIT_COLUMN){
+			if(!trashClickedOnce){
+				trashClickedOnce = true;
+				trashHovered=true;
+				Thread waitForDoubleClick = new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						try {
+							Thread.sleep(400);
+							trashClickedOnce=false;
+							trashHovered = false;
+							update();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+				waitForDoubleClick.start();
+				update();		
+			}else{
+				rows.removeAll(rows);
+				trashHovered = false;
+				trashClickedOnce=false;
+				update();
+			}
+		}
 		if(xRelative >EDIT_COLUMN){
 			int clickedColumn = 0;
 			int widthToClick = 0;
@@ -461,7 +549,7 @@ public class SimpleTable extends StyledComponent implements Clickable, Dragable{
 			//calculate difference between starty and finishy
 			
 			
-			rows.add(moveToIndex,rows.remove(origIndex));
+			if(moveToIndex>=0 && moveToIndex<rows.size()+1)rows.add(moveToIndex,rows.remove(origIndex));
 		}
 		moveToIndex = -1;
 		update();

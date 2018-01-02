@@ -60,8 +60,8 @@ public class ScrollablePane extends ComponentContainer implements Clickable, Scr
 	private final FocusController parentScreen;
 	protected Component containingComponent;//some components like Accordion contain ScrollapblePanes
 	//	private Scrollable content;
-	private int contentX;
-	private int contentY;
+	protected int contentX;
+	protected int contentY;
 	private int maxY;
 	protected int xRelative;
 	protected int yRelative;
@@ -139,6 +139,7 @@ public class ScrollablePane extends ComponentContainer implements Clickable, Scr
 		contentY=0;
 		int[] maxXAndY = calculateMaxXY();
 		maxY = maxXAndY[1];
+		System.out.println("ScrollablePane has changed and maxY is now "+maxY);
 		setContentImage(maxXAndY[0],maxXAndY[1]);
 
 	}
@@ -177,17 +178,6 @@ public class ScrollablePane extends ComponentContainer implements Clickable, Scr
 			yRelative = y - getY();
 
 		}
-		//		else{
-		//			if(upArrowHovered || downArrowHovered){
-		//				upArrowHovered = false;
-		//				downArrowHovered = false;
-		//				
-		//				update();
-		//			}
-		//			upArrowHovered = false;
-		//			downArrowHovered = false;
-		//			
-		//		}
 		return hov;
 	}
 
@@ -321,16 +311,17 @@ public class ScrollablePane extends ComponentContainer implements Clickable, Scr
 		this.arrowColor = arrowColor;
 	}
 
+
 	@Override
 	public void update(Graphics2D g2) {
 		if(contentImage != null) {
 			Graphics2D gContent  = contentImage.createGraphics();
-			gContent.setColor(Color.WHITE);
+			gContent.setColor(getScreenBackground());
 			gContent.fillRect(0, 0, contentImage.getWidth(), contentImage.getHeight());
 			super.update(gContent);
 			BufferedImage buffer = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g = buffer.createGraphics();
-			g.setColor(Color.WHITE);
+			g.setColor(getScreenBackground());
 			g.fillRect(0, 0, getWidth(), getHeight());
 			g.drawImage(contentImage, 0, 0, getWidth(), getHeight(), contentX, contentY, contentX+getWidth(), contentY+getHeight(), null);
 			if(upArrowHovered){
@@ -344,6 +335,7 @@ public class ScrollablePane extends ComponentContainer implements Clickable, Scr
 				g.setColor(arrowColor);
 			}
 			if(contentY+getHeight()<contentImage.getHeight())g.fill(downArrow);
+			drawBorder(g);
 			g2.drawImage(buffer, 0, 0, null);
 		}
 	}
@@ -409,6 +401,16 @@ public class ScrollablePane extends ComponentContainer implements Clickable, Scr
 		this.visible = visible;
 	}
 
+	@Override
+	public void unhoverAction() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void move(int newX, int newY, int durationMS){
+		Visible.move(this, newX, newY, durationMS);
+	}
+	
 
 
 
