@@ -15,6 +15,7 @@ public class SimonMain extends GUIApplication
 		game = new SimonMain(800, 500);
 		Thread runner = new Thread(game);
 		runner.start();
+		
 	}
 	public SimonMain(int width, int height) 
 	{
