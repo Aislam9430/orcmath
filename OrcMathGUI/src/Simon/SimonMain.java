@@ -3,8 +3,7 @@ package Simon;
 import java.util.ArrayList;
 
 import guiTeacher.GUIApplication;
-import holiday.Front;
-import holiday.HolidayCard;
+
 
 public class SimonMain extends GUIApplication 
 {
