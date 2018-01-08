@@ -23,8 +23,8 @@ public class CustomButton extends Button
 	{
 		return litUp;
 	}
-	public void toggle()
+	public void makeFalse()
 	{
-		litUp = !litUp; 
+		litUp = false; 
 	}
 }

@@ -21,6 +21,7 @@ public class SimonScreen extends ClickableScreen
 	private CustomButton b6;
 	private CustomButton b7;
 	private CustomButton b8; 
+	private CustomButton play;
 	private TextArea stat;	
 	private TextArea turn;
 	
@@ -36,7 +37,8 @@ public class SimonScreen extends ClickableScreen
 	private int round;
 	private int sequenceLength;
 	
-	private ArrayList<Move> userMov;
+	private ArrayList<Move> userMove;
+	private ArrayList<Move> simonMove;
 	public SimonScreen(int width, int height) 
 	{
 		super(width, height);
@@ -50,6 +52,8 @@ public class SimonScreen extends ClickableScreen
 		cyan = new Move(6);
 		orange = new Move(7);
 		black = new Move(8);
+		userMove = new ArrayList<Move>();
+		simonMove = new ArrayList<Move>();
 	}
 	public void addRound() {
 		round++;
@@ -61,15 +65,17 @@ public class SimonScreen extends ClickableScreen
 	public void initAllObjects(List<Visible> viewObjects) 
 	{
 		stat = new TextArea(140, 180, getWidth()-220, 400, "Current Round "+round+"\nSequenceLength "+sequenceLength);
-		turn = new TextArea(175, 400, getWidth()-220, 400, "");
-		b1 = new CustomButton(50,50, 75, 75, "",Color.RED, new Action(){ public void act() { clicked(red); } });
-		b2 = new CustomButton(300,300, 75, 75, "",Color.BLUE, new Action(){ public void act() { clicked(blue); } });
-		b3 = new CustomButton(175,50, 75, 75, "",Color.YELLOW, new Action(){ public void act() { clicked(yellow); } });
-		b4 = new CustomButton(50,175, 75, 75, "",Color.GREEN, new Action(){ public void act() { clicked(green); } });
-		b5 = new CustomButton(300,175, 75, 75, "",Color.PINK, new Action(){ public void act() { clicked(pink); } });
-		b6 = new CustomButton(175,300, 75, 75, "",Color.CYAN, new Action(){ public void act() { clicked(cyan); } });
-		b7 = new CustomButton(300,50, 75, 75, "",Color.ORANGE, new Action(){ public void act() { clicked(orange); } });
-		b8 = new CustomButton(50,300, 75, 75, "",Color.BLACK, new Action(){ public void act() { clicked(black); } });
+		turn = new TextArea(400, 200, getWidth()-220, 400, "Press Play To Start The Game.");
+		play = new CustomButton(500, 200, 75, 75,"Play", Color.DARK_GRAY,new Action(){ public void act() { playing(); } });
+		b1 = new CustomButton(50,50, 75, 75, "",Color.RED, new Action(){ public void act() { clicked(red,b1); } });
+		b2 = new CustomButton(300,300, 75, 75, "",Color.BLUE, new Action(){ public void act() { clicked(blue,b2); } });
+		b3 = new CustomButton(175,50, 75, 75, "",Color.YELLOW, new Action(){ public void act() { clicked(yellow,b3); } });
+		b4 = new CustomButton(50,175, 75, 75, "",Color.GREEN, new Action(){ public void act() { clicked(green,b4); } });
+		b5 = new CustomButton(300,175, 75, 75, "",Color.PINK, new Action(){ public void act() { clicked(pink,b5); } });
+		b6 = new CustomButton(175,300, 75, 75, "",Color.CYAN, new Action(){ public void act() { clicked(cyan,b6); } });
+		b7 = new CustomButton(300,50, 75, 75, "",Color.ORANGE, new Action(){ public void act() { clicked(orange,b7); } });
+		b8 = new CustomButton(50,300, 75, 75, "",Color.BLACK, new Action(){ public void act() { clicked(black,b8); } });
+		viewObjects.add(play);
 		viewObjects.add(stat);
 		viewObjects.add(turn);
 		viewObjects.add(b1);
@@ -83,19 +89,22 @@ public class SimonScreen extends ClickableScreen
 	}
 	private void playing()
 	{
-		turn.setText("Simon's Turn");
+		turn.setText("I got the moves");
+		pause(1000);
+		SimonPlay();
 		//light up buttons store info in arraylist
 		turn.setText("Your Turn");
-		pause(600);
+		pause(1000);
 		turn.setText("");
 	}
 	public void SimonPlay()
 	{
 		
 	}
-	private void clicked(Move move)
+	private void clicked(Move move,CustomButton b)
 	{
-		
+		userMove.add(move);
+		b.makeFalse();
 	}
 	public void pause(long time)
 	{
