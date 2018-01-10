@@ -39,6 +39,8 @@ public class SimonScreen extends ClickableScreen
 	
 	private ArrayList<Move> userMove;
 	private ArrayList<Move> simonMove;
+	private ArrayList<Move> allMoves;
+	
 	public SimonScreen(int width, int height) 
 	{
 		super(width, height);
@@ -54,6 +56,17 @@ public class SimonScreen extends ClickableScreen
 		black = new Move(8);
 		userMove = new ArrayList<Move>();
 		simonMove = new ArrayList<Move>();
+		allMoves = new ArrayList<Move>();
+		allMoves.add(red);
+		allMoves.add(blue);
+		allMoves.add(yellow);
+		allMoves.add(green);
+		allMoves.add(pink);
+		allMoves.add(cyan);
+		allMoves.add(orange);
+		allMoves.add(black);
+		
+		
 	}
 	public void addRound() {
 		round++;
