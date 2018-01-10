@@ -13,6 +13,7 @@ import holiday.HolidayCard;
 
 public class SimonScreen extends ClickableScreen 
 {
+	
 	private CustomButton b1; 
 	private CustomButton b2;
 	private CustomButton b3;
@@ -46,14 +47,14 @@ public class SimonScreen extends ClickableScreen
 		super(width, height);
 		round = 1;
 		sequenceLength = 3;
-		red = new Move(1);
-		blue = new Move(2);
-		yellow = new Move(3);
-		green = new Move(4);
-		pink = new Move(5);
-		cyan = new Move(6);
-		orange = new Move(7);
-		black = new Move(8);
+		red = Move.RED;
+		blue = Move.BLUE;
+		yellow = Move.YELLOW;
+		green = Move.GREEN;
+		pink = Move.PINK;
+		cyan = Move.CYAN;
+		orange = Move.ORANGE;
+		black = Move.BLACK;
 		userMove = new ArrayList<Move>();
 		simonMove = new ArrayList<Move>();
 		allMoves = new ArrayList<Move>();
@@ -112,8 +113,14 @@ public class SimonScreen extends ClickableScreen
 	}
 	public void SimonPlay()
 	{
+	    int index = generateNum();
 		
 	}
+	private int generateNum()
+	{
+		return (int)(Math.random()*9);
+	}
+
 	private void clicked(Move move,CustomButton b)
 	{
 		userMove.add(move);
