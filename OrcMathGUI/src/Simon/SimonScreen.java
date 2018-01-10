@@ -105,102 +105,115 @@ public class SimonScreen extends ClickableScreen
 	{
 		turn.setText("I got the moves");
 		pause(1000);
-		SimonPlay();
+		SimonPlay(sequenceLength);
 		//light up buttons store info in arraylist
 		turn.setText("Your Turn");
 		pause(1000);
 		turn.setText("");
 	}
-	public void SimonPlay()
+	public void SimonPlay(int sequence)
 	{
-	    int index = generateNum();
-	    switch(allMoves.get(index))
+	    if(sequence == 3)
 	    {
-			case BLACK:
-				if(simonMove.contains(black))
-				{
-					index = generateNum();
-				}
-				else
-				{
-					simonMove.add(black);
-					break;
-				}
-			case BLUE:
-				if(simonMove.contains(blue))
-				{
-					index = generateNum();
-				}
-				else
-				{
-					simonMove.add(blue);
-					break;
-				}
-			case CYAN:
-				if(simonMove.contains(cyan))
-				{
-					index = generateNum();
-				}
-				else
-				{
-					simonMove.add(cyan);
-					break;
-				}
-			case GREEN:
-				if(simonMove.contains(green))
-				{
-					index = generateNum();
-				}
-				else
-				{
-					simonMove.add(green);
-					break;
-				}
-			case ORANGE:
-				if(simonMove.contains(orange))
-				{
-					index = generateNum();
-				}
-				else
-				{
-					simonMove.add(orange);
-					break;
-				}
-			case PINK:
-				if(simonMove.contains(pink))
-				{
-					index = generateNum();
-				}
-				else
-				{
-					simonMove.add(pink);
-					break;
-				}
-			case RED:
-				if(simonMove.contains(red))
-				{
-					index = generateNum();
-				}
-				else
-				{
-					simonMove.add(red);
-					break;
-				}
-			case YELLOW:
-				if(simonMove.contains(yellow))
-				{
-					index = generateNum();
-				}
-				else
-				{
-					simonMove.add(yellow);
-					break;
-				}
-			default:
-				break;
-	    
+	    	for(int i  = 0; i < sequence;i++)
+	    	{
+	    		switching();
+	    	}
 	    }
-		
+	    else
+	    {
+	    	switching();
+	    }
+	}
+	private void switching()
+	{
+		 int index = generateNum();
+		    switch(allMoves.get(index))
+		    {
+				case BLACK:
+					if(simonMove.contains(black))
+					{
+						index = generateNum();
+					}
+					else
+					{
+						simonMove.add(black);
+						break;
+					}
+				case BLUE:
+					if(simonMove.contains(blue))
+					{
+						index = generateNum();
+					}
+					else
+					{
+						simonMove.add(blue);
+						break;
+					}
+				case CYAN:
+					if(simonMove.contains(cyan))
+					{
+						index = generateNum();
+					}
+					else
+					{
+						simonMove.add(cyan);
+						break;
+					}
+				case GREEN:
+					if(simonMove.contains(green))
+					{
+						index = generateNum();
+					}
+					else
+					{
+						simonMove.add(green);
+						break;
+					}
+				case ORANGE:
+					if(simonMove.contains(orange))
+					{
+						index = generateNum();
+					}
+					else
+					{
+						simonMove.add(orange);
+						break;
+					}
+				case PINK:
+					if(simonMove.contains(pink))
+					{
+						index = generateNum();
+					}
+					else
+					{
+						simonMove.add(pink);
+						break;
+					}
+				case RED:
+					if(simonMove.contains(red))
+					{
+						index = generateNum();
+					}
+					else
+					{
+						simonMove.add(red);
+						break;
+					}
+				case YELLOW:
+					if(simonMove.contains(yellow))
+					{
+						index = generateNum();
+					}
+					else
+					{
+						simonMove.add(yellow);
+						break;
+					}
+				default:
+					break;
+		    
+		    }
 	}
 	private int generateNum()
 	{
