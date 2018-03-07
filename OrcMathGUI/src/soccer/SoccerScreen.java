@@ -18,6 +18,7 @@ public class SoccerScreen extends FullFunctionScreen{
 	public void initAllObjects(List<Visible> viewObjects) {
 		viewObjects.add(new Graphic(0, 0, getWidth(),getHeight(),"resources/field.png"));
 		viewObjects.add(new SoccerBall(getWidth(), getHeight()));
+		viewObjects.add(new Graphic(410, 350, 60, 150,"resources/tempsoccerplayer.jpg"));
 	}
 
 }
