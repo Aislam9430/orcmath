@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import guiTeacher.components.Graphic;
 import guiTeacher.components.MovingComponent;
 
-public class SoccerBall extends MovingComponent implements KeyListener{
+public class SoccerBall extends MovingComponent {
 	
 	private BufferedImage img;
 	private int leftToRight;
@@ -39,22 +39,16 @@ public class SoccerBall extends MovingComponent implements KeyListener{
 			System.out.print("x");
 		}
 	}
-
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void kickForward() {
+		setVx(0);
+		setVy(-10);
 	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		
-		
+	public void kickRight() {
+		setVx(5);
+		setVy(-5);
 	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void kickLeft() {
+		setVx(-5);
+		setVy(-5);
 	}
 }
