@@ -10,9 +10,9 @@ public class SoccerPlayer extends AnimatedComponent{
 	private Graphic standing;
 	
 	public SoccerPlayer() {
-		super(470, 410, 100, 100);
+		super(400, 310,140,140);
 		
-		standing = new Graphic(0, 0, 0, 0,"resources/standing.png");
+		standing = new Graphic(400, 310, 140, 140,"resources/standing.png");
 	}
 	public BufferedImage getImage() {
 		if(getVy() < 0){

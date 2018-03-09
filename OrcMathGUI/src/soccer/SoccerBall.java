@@ -36,7 +36,13 @@ public class SoccerBall extends MovingComponent {
 		if(getX()>leftToRight){
 			setX(0);
 			setVx(5);
-			System.out.print("x");
+		}
+		if(getVx() != 0 && getY() < 100) {
+			setVx(0);
+		}
+		if(getY() < 100) {
+			setVy(0);
+			
 		}
 	}
 	public void kickForward() {

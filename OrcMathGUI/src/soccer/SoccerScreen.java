@@ -24,19 +24,19 @@ public class SoccerScreen extends FullFunctionScreen {
 		ball = new SoccerBall(getWidth(),getHeight());
 		viewObjects.add(ball);
 		viewObjects.add(new SoccerPlayer());
+		viewObjects.add(new Graphic(315,50,200,200,"resources/soccerGoal.png"));
 	}
 	public void keyPressed(KeyEvent e) {
 		 int key = e.getKeyCode();
 
 		    if (key == KeyEvent.VK_SPACE) {
-		    	System.out.print("xw");
-		    	/*if()//balls in front
+		    	if(ball.getX() > 400 && ball.getX() < 450) 
 		    		ball.kickForward();
-		    	if()//balls in front
-			        ball.kickRight();
-		    	if()//balls in front
+		    	if(ball.getX() > 360 && ball.getX() < 400)
 			        ball.kickLeft();
-		    */}
+		    	if(ball.getX() > 450 && ball.getX() < 500)
+			        ball.kickRight();
+		    }
 		
 	}
 }
