@@ -1,9 +1,6 @@
 package soccer;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 import guiTeacher.components.Graphic;
@@ -13,12 +10,14 @@ public class SoccerBall extends MovingComponent {
 	
 	private BufferedImage img;
 	private int leftToRight;
+	int speed;
 	
-	public SoccerBall(int w, int h) {
+	public SoccerBall(int w, int h,int s) {
 		super(0, 400, 30, 30);
-		leftToRight = w;
+		leftToRight = w; 
 		img = new Graphic(0, 0,30,30, "resources/soccer.png").getImage();
-		setVx(5);
+		speed = s;
+		setVx(s);
 		update();
 		Thread t = new Thread(this);
 		t.start();
@@ -35,14 +34,13 @@ public class SoccerBall extends MovingComponent {
 	public void checkBehaviors() {
 		if(getX()>leftToRight){
 			setX(0);
-			setVx(5);
+			setVx(speed);
 		}
 		if(getVx() != 0 && getY() < 100) {
 			setVx(0);
 		}
-		if(getY() < 100) {
+		else if(getY() < 100) {
 			setVy(0);
-			
 		}
 	}
 	public void kickForward() {
