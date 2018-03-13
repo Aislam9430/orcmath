@@ -1,7 +1,5 @@
 package soccer;
 
-import java.util.ArrayList;
-
 import guiTeacher.GUIApplication;
 
 
@@ -20,7 +18,6 @@ public class SoccerMain extends GUIApplication
 	{
 		super(width, height);
 		setVisible(true);
-		
 	}
 
 	@Override
